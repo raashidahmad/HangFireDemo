@@ -1,4 +1,6 @@
 
+using Hangfire;
+using Hangfire.SqlServer;
 using HangFireDemo.Helper;
 
 namespace HangFireDemo
@@ -9,6 +11,19 @@ namespace HangFireDemo
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddHangfire(configuration => configuration
+                   .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                   .UseSimpleAssemblyNameTypeSerializer()
+                   .UseRecommendedSerializerSettings()
+                   .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+                   {
+                       CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                       SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                       QueuePollInterval = TimeSpan.Zero,
+                       UseRecommendedIsolationLevel = true,
+                       DisableGlobalLocks = true
+                   }));
+            builder.Services.AddHangfireServer();
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -28,7 +43,7 @@ namespace HangFireDemo
             }
 
             app.UseHttpsRedirection();
-
+            app.UseHangfireDashboard("/dashboard");
             app.UseAuthorization();
 
 
