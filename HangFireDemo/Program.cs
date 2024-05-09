@@ -43,6 +43,7 @@ namespace HangFireDemo
             }
 
             app.UseHttpsRedirection();
+            
             app.UseHangfireDashboard("/dashboard");
             app.UseAuthorization();
 

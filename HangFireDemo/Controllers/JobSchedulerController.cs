@@ -20,7 +20,7 @@ namespace HangFireDemo.Controllers
         }
 
         [HttpGet]
-        [Route("{action}")]
+        [Route("[action]")]
         public IActionResult FireAndForgetJob()
         {
             var jobId = BackgroundJob.Enqueue(() => Console.WriteLine($"Welcome to {welcomePackage}"));
@@ -29,7 +29,7 @@ namespace HangFireDemo.Controllers
         }
 
         [HttpGet]
-        [Route("{action}")]
+        [Route("[action]")]
         public IActionResult DelayedJob()
         {
             var jobId = BackgroundJob.Schedule(() => Console.WriteLine("Welcome user in Delayed Job Demo!"), TimeSpan.FromSeconds(60));
@@ -38,7 +38,7 @@ namespace HangFireDemo.Controllers
         }
 
         [HttpGet]
-        [Route("{action}")]
+        [Route("[action]")]
         public IActionResult ContinuousJob()
         {
             var jobId = BackgroundJob.Schedule(() => Console.WriteLine("A scheduled parent job"), TimeSpan.FromSeconds(120));
